@@ -1,0 +1,94 @@
+import React, { useState } from 'react';
+import './Signup.css';
+import { MdEmail } from "react-icons/md";
+
+function Signup() {
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
+
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setSuccess('');
+
+        // Basic form validation
+        if (!formData.username || !formData.email || !formData.password) {
+            setError("All fields are required.");
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to register');
+            }
+
+            const result = await response.json();
+            setSuccess("Registration successful!");
+            console.log(result);
+
+            // Reset form after successful submission
+            setFormData({ username: '', email: '', password: '' });
+        } catch (error) {
+            setError('Error registering user. Please try again.');
+            console.error('Error:', error);
+        }
+    };
+
+    return (
+        <div className="signup"> 
+        <form onSubmit={handleSubmit} className="signup-form">
+            {/* <div className="signup"> */}
+                <div className='divchild'>
+                <h2 className='signupheading'>Signup your account</h2>
+                {/* <label>Username</label> */}
+                
+                <i> <MdEmail className='MdEmail' /></i>
+
+                <input className='input1'
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                />
+                <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder='enter your password'
+                />
+            </div>
+            {/* </div> */}
+            <button className='button' type="submit">Register</button>
+
+            {/* Display error or success messages */}
+            {error && <p className="error">{error}</p>}
+            {success && <p className="success">{success}</p>}
+        </form>
+        </div>
+
+    );
+}
+
+export default Signup;
