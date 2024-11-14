@@ -1,0 +1,68 @@
+// LoginForm.js
+import React, { useState } from 'react';
+import './Signup.css';
+// import Signup from './Signup';
+import { BiSolidShow ,BiSolidHide} from "react-icons/bi";
+
+const Signup = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Add login logic here
+        console.log('Email:', email);
+        console.log('Password:', password);
+    };
+
+    return (
+        <div className="login-container">
+            <h2>Log in with</h2>
+            <div className="login-buttons">
+                <button className="login-btn google">Google</button>
+                <button className="login-btn apple">Apple</button>
+            </div>
+            <div className="separator">
+                <span>or</span>
+            </div>
+            <form onSubmit={handleSubmit}>
+                <div className="input-group">
+                    <label>Email address</label>
+                    <input 
+                        type="email" 
+                        value={email} 
+                        onChange={(e) => setEmail(e.target.value)} 
+                        required 
+                    />
+                </div>
+                <div className="input-group">
+                    <label>Password</label>
+                    <div className="password-field">
+                        <input 
+                            type={showPassword ? 'text' : 'password'} 
+                            value={password} 
+                            onChange={(e) => setPassword(e.target.value)} 
+                            required 
+                        />
+                        <span 
+                            className="toggle-password" 
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? < BiSolidShow className='text-lg' /> : <BiSolidHide className="text-lg" />} 
+                        </span>
+                    </div>
+                </div>
+                <div className="forgot-password">
+                    <a href="#">Forgot Password?</a>
+                </div>
+                <button type="submit" className="login-submit">Log In</button>
+            </form>
+            <div className="signup-link">
+                Don’t have an account? <a href="#">Signup</a>
+            </div>
+        </div>
+    );
+};
+
+export default Signup;
